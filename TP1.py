@@ -186,9 +186,10 @@ def ler_csv(nome_arquivo):
   None: Apenas imprime as linhas do arquivo.
   '''
   df = pd.read_csv(nome_arquivo) # Lê o arquivo CSV em um DataFrame
-  print(df)
+  for index, row in df.iterrows():
+    print(row.to_dict())
   
-ler_csv(nome_arquivo)
+ler_csv('dados.csv')
 
 # %% 11
 import pandas as pd
@@ -215,7 +216,7 @@ dados = [
 
 escrever_csv('dados.csv', dados)
 # %% 12
-import pandas as pd
+import json
 
 def ler_json(nome_arquivo):
   ''' 
@@ -227,14 +228,14 @@ def ler_json(nome_arquivo):
   Retorno:
   dict: Dicionário com os dados do arquivo JSON.
   '''
-  dados = pd.read_json(nome_arquivo)
-  return dados.to_dict(orient='records')
+  with open(nome_arquivo, 'r', encoding="utf-8") as f:
+    return json.load(f)
 
 dados = ler_json('dados.json')
 print(dados)
 
 #%% 13
-import pandas as pd
+import json
 
 def escrever_json(nome_arquivo, dados):
   ''' 
@@ -247,8 +248,8 @@ def escrever_json(nome_arquivo, dados):
   Retorno:
   None: Apenas salva os dados no arquivo JSON.
   '''
-  df = pd.DataFrame(dados)
-  df.to_json(nome_arquivo, orient='records', lines=False, force_ascii=False)
+  with open(nome_arquivo, 'w', encoding='utf-8') as f:
+    json.dump(dados, f, indent=4, ensure_ascii=False)
   
 dados = [
     {"Nome": "Alice", "Idade": 25, "Cidade": "São Paulo"},
@@ -300,8 +301,6 @@ def criar_conjunto_nomes(nome_arquivo):
 nomes_unicos = criar_conjunto_nomes('nomes.txt')
 print(nomes_unicos)
 # %% 16 
-import pandas as pd
-
 def indice_invertido(nome_arquivo):
   ''' 
   Cria um índice invertido de palavras a partir de um arquivo de texto.
@@ -312,18 +311,14 @@ def indice_invertido(nome_arquivo):
   Retorno:
   dict: Dicionário onde as chaves são palavras e os valores são conjuntos de números de linha onde cada palavra aparece.
   '''
-  df = pd.DataFrame({'Linha': open(nome_arquivo, encoding='utf-8').read().splitlines()})
-  
   indice = {}
-  
-  for numero_linha, texto in enumerate(df['Linha'], start = 1):
-    palavras = texto.split()
-    for palavra in palavras:
-      palavra = palavra.strip(".,!?()[]{}\":;").lower()
-      if palavra:
-        if palavra not in indice:
-          indice[palavra] = set()
-        indice[palavra].add(numero_linha)
+  with open(nome_arquivo, encoding='utf-8') as f:
+    for num_linha, linha in enumerate(f, start=1):
+      palavras = linha.lower().split()
+      for palavra in palavras:
+        palavra = palavra.strip(".,!?()[]{}\":;")
+        if palavra:
+          indice.setdefault(palavra, set()).add(num_linha)
   return indice
 
 resultado = indice_invertido('texto.txt')

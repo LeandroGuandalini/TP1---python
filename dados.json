@@ -1,1 +1,17 @@
-[{"Nome":"Alice","Idade":25,"Cidade":"São Paulo"},{"Nome":"Bruno","Idade":30,"Cidade":"Rio de Janeiro"},{"Nome":"Carlos","Idade":22,"Cidade":"Belo Horizonte"}]
+[
+    {
+        "Nome": "Alice",
+        "Idade": 25,
+        "Cidade": "São Paulo"
+    },
+    {
+        "Nome": "Bruno",
+        "Idade": 30,
+        "Cidade": "Rio de Janeiro"
+    },
+    {
+        "Nome": "Carlos",
+        "Idade": 22,
+        "Cidade": "Belo Horizonte"
+    }
+]
